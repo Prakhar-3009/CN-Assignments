@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 udp_video_client.py
 Simple UDP video client that sends HELLO to server and receives JPEG chunks to display frames.
@@ -29,24 +28,22 @@ def main():
     args = parse_args()
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((args.listen_ip, args.listen_port))
-    sock.settimeout(1.0)   # periodic timeout to perform housecleaning
+    sock.settimeout(1.0)  
     server_addr = (args.server_ip, args.server_port)
 
-    # send HELLO so the server learns our addr and can stream to us
+    
     sock.sendto(b'HELLO', server_addr)
     print(f'[client] Sent HELLO to server at {server_addr}. Listening on {args.listen_ip}:{args.listen_port}')
 
-    # data structures to accumulate packets per frame
+   
     frames = {}  # frame_id -> {'total': int, 'parts': dict(pkt_id->bytes), 'ts': timestamp, 'received': int}
     last_displayed_frame = None
 
     try:
         while True:
-            # receive loop
             try:
                 packet, addr = sock.recvfrom(65536)
             except socket.timeout:
-                # periodically clean old frames
                 now = time.time()
                 drop_keys = []
                 for fid, info in frames.items():
@@ -54,11 +51,9 @@ def main():
                         drop_keys.append(fid)
                 for k in drop_keys:
                     del frames[k]
-                # continue to next recv
                 continue
 
             if len(packet) < HEADER_SIZE:
-                # ignore tiny packets (could be HELLO echo or portal messages)
                 continue
 
             frame_id, pkt_id, total_packets = struct.unpack(HEADER_STRUCT, packet[:HEADER_SIZE])
@@ -68,20 +63,15 @@ def main():
                 frames[frame_id] = {'total': total_packets, 'parts': {}, 'ts': time.time(), 'received': 0}
 
             info = frames[frame_id]
-            # check and store packet (avoid double-counting duplicates)
             if pkt_id not in info['parts']:
                 info['parts'][pkt_id] = payload
                 info['received'] += 1
                 info['ts'] = time.time()
-            # otherwise duplicate -> ignore
 
-            # when we have all packets, reconstruct and show
             if info['received'] == info['total']:
-                # reconstruct in order
                 try:
                     pieces = [info['parts'][i] for i in range(info['total'])]
                 except KeyError:
-                    # missing packet (shouldn't happen because received==total) - defensive
                     del frames[frame_id]
                     continue
                 jbuf = b''.join(pieces)
@@ -92,7 +82,6 @@ def main():
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print('[client] Quit requested (q). Exiting.')
                         break
-                # remove frame data from memory
                 del frames[frame_id]
     except KeyboardInterrupt:
         print('\n[client] KeyboardInterrupt - stopping.')

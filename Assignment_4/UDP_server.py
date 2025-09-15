@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 udp_video_server.py
 Simple UDP video streamer (server). Waits for client "HELLO", then streams frames as JPEG chunks.
@@ -15,7 +14,7 @@ import time
 import math
 import cv2
 
-HEADER_STRUCT = '!IHH'   # frame_id (uint32), packet_id (uint16), total_packets (uint16)
+HEADER_STRUCT = '!IHH'  
 HEADER_SIZE = struct.calcsize(HEADER_STRUCT)
 
 def parse_args():
@@ -70,13 +69,11 @@ def main():
                 print('[server] End of stream (video file ended) or camera failed. Exiting.')
                 break
 
-            # optional resize to limit bandwidth
             h, w = frame.shape[:2]
             if args.max_w and w > args.max_w:
                 new_h = int(h * args.max_w / w)
                 frame = cv2.resize(frame, (args.max_w, new_h))
 
-            # encode to JPEG
             encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), args.quality]
             success, encoded = cv2.imencode('.jpg', frame, encode_param)
             if not success:
@@ -86,11 +83,9 @@ def main():
             payload_len = len(payload)
             total_packets = math.ceil(payload_len / args.chunk)
             if total_packets >= 65535:
-                # header uses uint16 for total_packets; this is extremely large frame
                 print('[server] Frame too big to packetize with current chunk size. Skipping frame.')
                 continue
 
-            # send all packets for this frame
             for pkt_id in range(total_packets):
                 start = pkt_id * args.chunk
                 chunk = payload[start:start + args.chunk]
@@ -100,12 +95,9 @@ def main():
                     sock.sendto(packet, client_addr)
                 except Exception as e:
                     print('[server] sendto error:', e)
-                    # continue attempting to send remaining packets/frames
 
-            # advance frame id and respect FPS
             frame_id = (frame_id + 1) & 0xffffffff
 
-            # Sleep to maintain FPS (account for elapsed time)
             elapsed = time.perf_counter() - t0
             to_sleep = frame_interval - elapsed
             if to_sleep > 0:
