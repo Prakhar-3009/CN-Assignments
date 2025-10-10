@@ -1,0 +1,32 @@
+2025-10-10 15:05:56,182 - INFO - Starting Stop-and-Wait ARQ Simulation
+2025-10-10 15:05:56,182 - INFO - Sent Frame 0
+2025-10-10 15:05:56,182 - INFO - ACK 0 received successfully
+2025-10-10 15:05:57,182 - INFO - Sent Frame 1
+2025-10-10 15:05:57,182 - INFO - ACK 1 received successfully
+2025-10-10 15:05:58,182 - INFO - Sent Frame 2
+2025-10-10 15:05:58,183 - INFO - ACK 2 received successfully
+2025-10-10 15:05:59,183 - INFO - Sent Frame 3
+2025-10-10 15:05:59,183 - INFO - ACK 3 received successfully
+2025-10-10 15:06:00,183 - INFO - Sent Frame 4
+2025-10-10 15:06:00,184 - INFO - ACK 4 received successfully
+2025-10-10 15:06:01,184 - INFO - Sent Frame 5
+2025-10-10 15:06:01,184 - INFO - ACK 5 received successfully
+2025-10-10 15:06:02,184 - INFO - All frames transmitted successfully!
+2025-10-10 15:06:47,255 - INFO - Starting Stop-and-Wait ARQ Simulation
+2025-10-10 15:06:47,256 - INFO - Sent Frame 0
+2025-10-10 15:06:47,256 - INFO - ACK 0 received successfully
+2025-10-10 15:06:48,256 - INFO - Sent Frame 1
+2025-10-10 15:06:48,256 - INFO - ACK 1 received successfully
+2025-10-10 15:06:49,256 - INFO - Sent Frame 2
+2025-10-10 15:06:49,257 - WARNING - Frame 2 lost, retransmitting ...
+2025-10-10 15:06:51,257 - INFO - Sent Frame 2
+2025-10-10 15:06:51,257 - WARNING - Frame 2 lost, retransmitting ...
+2025-10-10 15:06:53,257 - INFO - Sent Frame 2
+2025-10-10 15:06:53,257 - INFO - ACK 2 received successfully
+2025-10-10 15:06:54,258 - INFO - Sent Frame 3
+2025-10-10 15:06:54,258 - INFO - ACK 3 received successfully
+2025-10-10 15:06:55,258 - INFO - Sent Frame 4
+2025-10-10 15:06:55,259 - INFO - ACK 4 received successfully
+2025-10-10 15:06:56,259 - INFO - Sent Frame 5
+2025-10-10 15:06:56,259 - INFO - ACK 5 received successfully
+2025-10-10 15:06:57,259 - INFO - All frames transmitted successfully!
